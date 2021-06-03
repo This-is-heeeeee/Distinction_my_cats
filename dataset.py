@@ -47,7 +47,8 @@ def dataset(base_dir):
     y = np.array(y)
     fname = np.array(fname)
 
-    #print("fname : {}\nX : {}\ny : {}\ntags : {}\n".format(fname,X,y,len(tags)))
+    print("fname : {}\nX : {}\ny : {}\ntags : {}\n".format(fname,X,y,len(tags)))
 
     return fname, X, y, tags
 
+dataset("dataset/training")
