@@ -95,7 +95,7 @@ def main():
     parser.add_argument('-i', '--input',
                         help='an input directory of dataset', required=True)
     parser.add_argument('-d', '--dimension',
-                        help='an image dimension', type=int, default=48)
+                        help='an image dimension', type=int, default=50)
     parser.add_argument('-c', '--channel',
                         help='an image channel', type=int, default=3)
     parser.add_argument('-e', '--epochs',
@@ -118,9 +118,9 @@ def main():
 
     print("loading dataset")
     X_train, Y_train, nb_classes = build_dataset(
-        "{}/train".format(data_dir), args.dimension)
+        "{}/training".format(data_dir), args.dimension)
     X_test, Y_test, nb_classes = build_dataset(
-        "{}/test".format(data_dir), args.dimension)
+        "{}/testing".format(data_dir), args.dimension)
     print("num of classes : {}".format(nb_classes))
 
     model = build_model(SHAPE)
