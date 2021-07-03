@@ -1,6 +1,7 @@
 import cv2
 import numpy
 import os
+import sys
 
 cascade_filename = 'haarcascade_frontalcatface.xml'
 cascade_filename_ex = 'haarcascade_frontalcatface_extended.xml'
@@ -8,13 +9,14 @@ cascade_filename_ex = 'haarcascade_frontalcatface_extended.xml'
 SF = 1.05#scale factor -> 1.05, 1.3 ...
 MN = 3 #minimum neighbours -> 3,4,5,6 ...
 
-origin_path = "data"
+origin_path = "datas"
 destination_path = "dataset"
-folders = ["img", "cam"]
+
+data_class = sys.argv[1]
 
 def videoDetector(cascade, cascade_ex):
 
-    for root, dirs, files in os.walk("{}/{}".format(origin_path, folders[1])):
+    for root, dirs, files in os.walk("{}/{}".format(origin_path, data_class)):
         for cam_file in files:
             print(root[-1])
             cam = cv2.VideoCapture("{}/{}".format(root, cam_file))
@@ -43,7 +45,8 @@ def videoDetector(cascade, cascade_ex):
                         x, y, w, h = results[i]
                         crop = img[y:y + h, x:x + w].copy()
                         crop = cv2.resize(crop, dsize=(50, 50))
-                        cv2.imwrite("{}/{}/{}_{}-{}.jpg".format(destination_path, root[-1], cam_file[0:-4], count, i), crop)
+                        cv2.imwrite("{}/{}/{}/{}_{}-{}.jpg".format(destination_path, data_class, root[-1], cam_file[0:-4], count, i), crop)
+                        print("save!")
                         if i == len(results)-1:
                             count+=1
 
@@ -53,7 +56,8 @@ def videoDetector(cascade, cascade_ex):
                         x, y, w, h = results_ex[i]
                         crop = img[y:y + h, x:x + w].copy()
                         crop = cv2.resize(crop, dsize=(50, 50))
-                        cv2.imwrite("{}/{}/{}_{}-{}.jpg".format(destination_path, root[-1], cam_file[0:-4], count_ex, i), crop)
+                        cv2.imwrite("{}/{}/{}/{}_{}-{}.jpg".format(destination_path, data_class, root[-1], cam_file[0:-4], count_ex, i), crop)
+                        print("save_ex!")
                         if i == len(results_ex)-1:
                             count_ex+=1
 
@@ -74,16 +78,16 @@ def videoDetector(cascade, cascade_ex):
                         #cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), thickness=2)
                 """
 
-                cv2.imshow('catface', img)
+                #cv2.imshow('catface', img)
 
-                if count >= 10 or count_ex >= 10 :
+                if count >= 10 and count_ex >= 10 :
                     break
 
                 if cv2.waitKey(1) > 0:
                     break
 
 def imgDetector(cascade,cascade_ex):
-    for root, dirs, files in os.walk("{}/{}".format(origin_path, folders[0])):
+    for root, dirs, files in os.walk("{}/{}".format(origin_path, data_class)):
         for img_file in files:
             img = cv2.imread("{}/{}".format(root,img_file))
 
@@ -101,13 +105,13 @@ def imgDetector(cascade,cascade_ex):
                 x, y, w, h = results[i]
                 crop = img[y:y + h, x:x + w].copy()
                 crop = cv2.resize(crop, dsize=(50, 50))
-                cv2.imwrite("{}/{}/{}_{}.jpg".format(destination_path, root[-1], img_file[0:-4], i), crop)
+                cv2.imwrite("{}/{}/{}/{}_{}.jpg".format(destination_path, data_class, root[-1], img_file[0:-4], i), crop)
 
             for i in range(len(results_ex)):
                 x, y, w, h = results_ex[i]
                 crop = img[y:y + h, x:x + w].copy()
                 crop = cv2.resize(crop, dsize=(50, 50))
-                cv2.imwrite("{}/{}/ex_{}_{}.jpg".format(destination_path, root[-1], img_file[0:-4], i), crop)
+                cv2.imwrite("{}/{}/{}/ex_{}_{}.jpg".format(destination_path, data_class, root[-1], img_file[0:-4], i), crop)
 
             """
             if len(results) > 0:
@@ -139,6 +143,14 @@ def main():
 
     if not os.path.exists(destination_path):
         os.mkdir(destination_path)
+    if not os.path.exists("{}/{}".format(destination_path, data_class)):
+        os.mkdir("{}/{}".format(destination_path, data_class))
+    if not os.path.exists("{}/{}/0".format(destination_path, data_class)):
+        os.mkdir("{}/{}/0".format(destination_path, data_class))
+    if not os.path.exists("{}/{}/1".format(destination_path, data_class)):
+        os.mkdir("{}/{}/1".format(destination_path, data_class))
+    if not os.path.exists("{}/{}/2".format(destination_path, data_class)):
+        os.mkdir("{}/{}/2".format(destination_path, data_class))
 
     """
     for folder in folders:

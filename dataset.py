@@ -52,4 +52,4 @@ def dataset(base_dir):
 
     return X, y, tags
 
-dataset("dataset/testing")
+dataset("dataset/test")
